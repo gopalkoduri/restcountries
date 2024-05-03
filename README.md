@@ -1,6 +1,6 @@
-# RestCountries
+# PyRestCountries
 
-`RestCountries` is a Pythonic wrapper around the REST Countries API, which provides a simple way to access and use country data.
+`PyRestCountries` is a Pythonic wrapper around the REST Countries API, which provides a simple way to access and use country data.
 
 ## Features
 
@@ -10,10 +10,10 @@
 
 ## Installation
 
-Install `RestCountries` using pip:
+Install `PyRestCountries` using pip:
 
 ```bash
-pip install restcountries
+pip install pyrestcountries
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ pip install restcountries
 Here's a quick example to get you started:
 
 ```python
-from restcountries import RestCountriesAPI
+from pyrestcountries import RestCountriesAPI
 
 api = RestCountriesAPI()
 
@@ -172,8 +172,8 @@ To set up a development environment:
 1. Clone the repo:
 
    ```bash
-   git clone https://github.com/gopalkoduri/restcountries.git
-   cd restcountries
+   git clone https://github.com/musicmuni/pyrestcountries.git
+   cd pyrestcountries
    ```
 
 2. Install the dependencies:
