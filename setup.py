@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="pyrestcountries",
-    version="2024.04.29",
+    version="2024.05.03",
     description="Pythonic wrapper around data served by restcountries API",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
