@@ -58,14 +58,6 @@ class RestCountriesAPI:
         else:
             response.raise_for_status()
 
-    def get_country_by_code(self, code: str):
-        """Fetch a country by its ISO2 code from the cache."""
-        countries_data = self.cache.get("countries_data")
-        if countries_data:
-            country_data = next((item for item in countries_data if item["cca2"] == code), None)
-            return country_data
-        return None
-
     def close_cache(self):
         """Close the cache properly."""
         self.cache.close()
@@ -92,10 +84,19 @@ class RestCountriesAPI:
         raise ValueError("Country not found in cache")
 
     def fetch_country_by_cca2(self, cca2: str) -> Country:
-        """Fetch a country by its ISO code using cached data."""
+        """Fetch a country by its ISO2 code using cached data."""
         countries_data = self.cache.get("countries_data")
         if countries_data:
             country_data = next((item for item in countries_data if item["cca2"] == cca2), None)
+            if country_data:
+                return self._parse_country(country_data)
+        raise ValueError("Country not found in cache")
+
+    def fetch_country_by_cca3(self, cca3: str) -> Country:
+        """Fetch a country by its ISO3 code using cached data."""
+        countries_data = self.cache.get("countries_data")
+        if countries_data:
+            country_data = next((item for item in countries_data if item["cca3"] == cca3), None)
             if country_data:
                 return self._parse_country(country_data)
         raise ValueError("Country not found in cache")
@@ -120,10 +121,3 @@ class RestCountriesAPI:
                     return [self._parse_country(country_data)] if country_data else []
 
         return []  # No match found
-
-
-# Usage example:
-# api = RestCountriesAPI()
-# usa = api.fetch_country_by_name("United States")
-# print(usa.name.official)
-# print(usa.capital)

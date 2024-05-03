@@ -4,15 +4,14 @@ setup(
     name="restcountries",
     version="2024.04.29",
     description="Pythonic wrapper around data served by restcountries API",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
     author="Gopala Krishna Koduri",
     author_email="gopal@riyazapp.com",
-    url="https://github.com/gopalkoduri/restcountries",
+    url="https://github.com/musicmuni/restcountries",
     packages=find_packages(),
     include_package_data=True,
-    install_requires=[
-        # List your package dependencies here
-        # 'numpy', 'pandas', etc.
-    ],
+    install_requires=["requests", "appdirs", "diskcache", "thefuzz"],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
@@ -25,4 +24,12 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
     ],
+    python_requires=">=3.7",
+    project_urls={
+        "Documentation": "https://github.com/musicmuni/restcountries",
+        "Source": "https://github.com/musicmuni/restcountries",
+        "Tracker": "https://github.com/musicmuni/restcountries/issues",
+        "Connect w/ Author": "https://linkedin.com/in/gopalkoduri",
+        "Riyaz - Learn to sing": "https://riyazapp.com",
+    },
 )
