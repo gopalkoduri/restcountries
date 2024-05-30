@@ -1,14 +1,16 @@
 import os
+import time
 
 import appdirs
 import requests
-from .data import *
 from diskcache import Cache
 from thefuzz import fuzz, process
 
+from .data import *
+
 
 class RestCountriesAPI:
-    BASE_URL = "https://restcountries.com/v3.1"
+    API_URL = "https://restcountries.com/v3.1/all"
 
     # caching to make sure we don't poll API for every request
     # declaring outside init so that this cache is shared across instances of this class
@@ -39,21 +41,24 @@ class RestCountriesAPI:
             self.country_iso2_to_names_map[iso2] = all_names
 
     def update_countries_cache(self):
-        """Fetches all country data from the API and caches it, using ETag to check for changes."""
-        headers = {}
-        etag = self.cache.get("etag")
+        """Fetches all country data from the API and caches it, using max-age to determine expiration."""
+        cache_expiration = self.cache.get("cache_expiration", None)
+        current_time = time.time()
 
-        if etag:
-            headers["If-None-Match"] = etag
+        if cache_expiration and current_time < cache_expiration:
+            print("Using cached data...")
+            return  # Data in cache is still valid based on max-age
 
-        response = requests.get(f"{self.BASE_URL}/all", headers=headers)
-
-        if response.status_code == 304:
-            print("Data has not changed since the last fetch. Using cached data...")
-            return  # Data in cache is still up to date
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+        }
+        response = requests.get(self.API_URL, headers=headers, timeout=10)
         if response.status_code == 200:
-            print("Updating cache as data changed on remote...")
-            self.cache.set("etag", response.headers.get("ETag"))
+            print("Updating cache as data fetched from remote...")
+            # Calculate new expiration time based on max-age
+            max_age = int(response.headers.get("Cache-Control").split("max-age=")[1].split(",")[0])
+            cache_expiration = current_time + max_age
+            self.cache.set("cache_expiration", cache_expiration)
             self.cache.set("countries_data", response.json())
         else:
             response.raise_for_status()
